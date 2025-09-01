@@ -1,0 +1,329 @@
+---
+title: "Geomorfología"
+subtitle: "Unidad 1 (Semana 2). <br> Fundamentos, bases geológicas y tiempo en geomorfología"
+author: "El tali"
+institute: "Universidad Autónoma de Santo Domingo (UASD)"
+date: "Actualizado: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    mathjax: default
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: '16:9'
+      slideNumberFormat: '%current%/%total%'
+---
+
+
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width = 12, 
+  fig.height = 8, 
+  fig.retina = 3,
+  out.width = "100%",
+  cache = TRUE,
+  echo = FALSE,
+  message = FALSE, 
+  warning = FALSE,
+  hiline = TRUE
+)
+library(ggplot2)
+library(dplyr)
+library(knitr)
+library(ggrepel)
+```
+
+```{css, echo=FALSE, eval=F}
+.title-slide {
+  background-image: url('fondo.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.title-slide .remark-slide-content {
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+}
+
+.large { font-size: 150% }
+.medium { font-size: 130% }
+.small { font-size: 110% }
+.tiny { font-size: 90% }
+
+.green { color: #2E8B57; }
+.blue { color: #4169E1; }
+.red { color: #DC143C; }
+
+.highlight {
+  background-color: #ffff99;
+  padding: 2px 4px;
+}
+
+.box {
+  background-color: #f0f8ff;
+  border: 2px solid #4169E1;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 10px 0;
+}
+
+.equation {
+  background-color: #f5f5f5;
+  border-left: 5px solid #2E8B57;
+  padding: 15px;
+  margin: 10px 0;
+  font-family: 'Courier New', monospace;
+}
+```
+
+
+# 🌍 Fundamentos
+
+.box[
+**Base:** Anderson & Anderson (2010) — *Geomorphology: The Mechanics and Chemistry of Landscapes* — **capítulos 1–4 y 6** (se **excluye** el cap. 5).
+]
+
+**Objetivos**
+- Comprender los **principios** que unifican la geomorfología.
+- Explicar la **morfología global** y la **topografía a gran escala**.
+- Reconocer la **deformación tectónica** en el relieve.
+- Seleccionar **métodos de datación** adecuados para establecer ritmos del paisaje.
+
+**Agenda (1.5 h)**
+- 1️⃣ Principios (cap. 1) — 15 min  
+- 2️⃣ Morfología global (cap. 2) — 15 min  
+- 3️⃣ Topografía a gran escala (cap. 3) — 25 min  
+- 4️⃣ Geomorfología tectónica (cap. 4) — 25 min  
+- 5️⃣ Datación y cronología (cap. 6) — 10 min  
+- 6️⃣ Cierre y preguntas — 10 min
+
+---
+class: inverse, center, middle
+
+# 1) Introducción al estudio de procesos superficiales (Cap. 1)
+
+---
+
+## ¿Qué estudia la geomorfología?
+
+- Forma y evolución del relieve desde **colinas** hasta **orógenos**.
+- Interacción **roca–agua–aire–vida** en la **Zona Crítica**.
+- Mirada **cuantitativa**: del **principio de conservación** a **modelos**.
+
+.box[
+**Motores del sistema:**  
+- **Desde abajo**: **tectónica** (levantamiento, isostasia, flexura).  
+- **Desde arriba**: **energía solar** (hidrología, hielo, vientos) → *no abordamos el cap. 5 en esta sesión*.
+]
+
+---
+
+## Principio de continuidad
+
+.equation[
+**dS/dt = P − L − ∇·q**
+]
+
+- **S**: almacenamiento (calor, masa de regolito/agua/hielo).  
+- **P**/**L**: fuentes y sumideros internos.  
+- **q**: **flujo** (transporte).  
+- Misma lógica en: **colinas**, **glaciares**, **ríos**, **datación**.
+
+---
+
+## Reglas de transporte
+
+- Materiales con **reologías** distintas: lineal/no lineal viscosa, plástica/coulomb.  
+- El transporte suele seguir **gradientes**: topográficos, térmicos o químicos.  
+- **No linealidad** y **umbrales** → relevancia de **eventos raros**.
+
+```{r event_magnitude, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4}
+library(ggplot2)
+set.seed(1)
+M <- seq(0,10,length=200)
+freq <- exp(-0.8*M)     # distribución de frecuencias (esquemática)
+work <- (M^2) * freq    # trabajo geomórfico (esquemático)
+DF <- data.frame(M, freq, work)
+
+p1 <- ggplot(DF, aes(M, freq)) + geom_line(size=1) + labs(x='Magnitud del evento', y='Frecuencia') + theme_minimal()
+p2 <- ggplot(DF, aes(M, work)) + geom_line(size=1) + labs(x='Magnitud del evento', y='Trabajo geomórfico') + theme_minimal()
+
+print(p1)
+```
+
+.tiny[**Idea clave:** aunque los pequeños eventos son frecuentes, muchos procesos **solo** ocurren sobre umbral y crecen de forma **no lineal** con la magnitud.]
+
+---
+
+```{r event_magnitude2, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4}
+print(p2)
+```
+
+.tiny[**Idea clave:** aunque los pequeños eventos son frecuentes, muchos procesos **solo** ocurren sobre umbral y crecen de forma **no lineal** con la magnitud.]
+
+---
+class: inverse, center, middle
+
+# 2) Morfología de la Tierra (Cap. 2)
+
+---
+
+## ¿Por qué no somos una esfera perfecta?
+
+- **Esferoide oblato**: rotación → **achatamiento polar**.  
+- **Gravedad y rotación** configuran el **geoide**.
+
+.box[
+**Hippsometría global**  
+- Distribución **bimodal** de elevaciones:  
+  - **Modo oceánico** (corteza oceánica densa y delgada).  
+  - **Modo continental** (corteza menos densa y más gruesa).  
+- Clave para entender la **estructura litosférica**.
+]
+
+---
+
+## Herramientas conceptuales
+
+- **Isostasia**: equilibrio entre columnas de litosfera y manto.  
+- **Flexura**: respuesta elástica-viscosa de la litosfera a cargas.  
+- **Tiempo de respuesta del manto**: regula el alabeo regional.
+
+---
+class: inverse, center, middle
+
+# 3) Topografía a gran escala (Cap. 3)
+
+---
+
+## Océanos y cordilleras: física de primer orden
+
+- **Cuenca oceánica**: combinación de **conducción térmica** en litosfera oceánica + **isostasia** → batimetría que profundiza con la **edad** de la placa.
+- **Tectónica de placas**: marco para velocidades, límites y **orógenos**.
+
+.equation[
+$$Profundidad\,\,cuenca \sim \sqrt{(edad\,\,litosfera\,\,oceánica)}$$
+]
+
+---
+
+## Erosión e isostasia
+
+- **Erosión** reduce carga → **rebote isostático** local/regional.  
+- **Glacio–isostasia** y **carga oceánica**: señales transitorias del Cuaternario.
+
+.box[
+**Topografía dinámica**  
+Flujos del manto pueden **elevar/deprimir** regiones (p. ej., bordes continentales, mesetas). Evidencias: alabeos de largo alcance, discrepancias geoidales/topográficas.
+]
+
+---
+
+## Casos y términos clave
+
+- **Orogenia** por engrosamiento cortical y/o acortamiento.  
+- **"Oozing"/"Gooshing"**: términos cualitativos para flujos laterales/litosféricos y del manto que afectan márgenes (p. ej., meseta tibetana y bordes continentales).
+
+---
+class: inverse, center, middle
+
+# 4) Geomorfología tectónica (Cap. 4)
+
+---
+
+## Deformación ligada a fallas
+
+- **Cinemática** de fallas *strike-slip*, **normales** y **megathrust**.  
+- **Escalado** de fallas e **interacción** entre segmentos.  
+- **Cambios de esfuerzo de Coulomb** tras grandes sismos.
+
+---
+
+## Cómo medimos el desplazamiento y la tasa
+
+- **Offsets** de marcadores geomórficos: terrazas marinas/fluviales, paleocanales, abanicos aluviales, **arrecifes de coral**.  
+- **Paleosismología**: trincheras, dataciones, catálogos.  
+- **Perfiles de ríos**: quiebres (knickpoints) y **uplift** diferencial.
+
+.box[
+**Generación de cordilleras por terremotos repetidos**  
+Acumulación de deformación elástica liberada episódicamente → relieve a largo plazo.
+]
+
+---
+
+## Flexura y plataformas marinas
+
+- **Plataformas marinas** elevadas registran **levantamiento** y/o **nivel del mar**.  
+- **Flexura** bajo cargas (volcánicas/sedimentarias) deja firmas de **curvatura**.
+
+---
+class: inverse, center, middle
+
+# 5) Datación y ritmos del paisaje (Cap. 6)
+
+---
+
+## Panorama de métodos
+
+- **Relativos**: superposición, paleomagnetismo.  
+- **Absolutos**: OSL, racemización de aminoácidos, **isótopos de O** y **estadios marinos (MIS)**, **radiométricos** (U–Th, U–Pb, 14C, Ar/Ar).
+- **Cosmogénicos** (in situ): 10Be, 26Al, 21Ne, 36Cl → **edades de exposición** y **tasas de erosión**.
+- **Termocronología de baja T**: **fission tracks**, **(U–Th)/He**, **Ar/Ar** → **exhumación** y **historia térmica**.
+
+---
+
+## Tabla guía (elige según la pregunta)
+
+.small[
+| Método | Ventana temporal | Material | ¿Qué fecha/mide? |
+|---|---|---|---|
+| OSL | 10²–10⁵ años | Cuarzos/feldespatos | Última exposición a luz |
+| 14C | 0–50 ka | Orgánicos/carbonatos | Muerte/deposición |
+| U–Th | 0.1–600 ka | Aragonito/calcita | Crecimiento de espeleotemas/corales |
+| 10Be–26Al (cuarzo) | 10³–10⁶ años | Superficies rocosas/sedimento | Exposición/erosión |
+| Fission tracks | 10⁶–10⁸ años | Apatito, zircón | Paso por ~110–120 °C (exhumación) |
+| (U–Th)/He | 10⁶–10⁷ años | Apatito, zircón | Paso por ~60–200 °C |
+| Ar/Ar | 10⁵–10⁹ años | Feldespato, mica | Cristalización/enfriamiento |
+]
+
+.tiny[**Criterios**: rango de edades, material disponible, incertidumbre, proceso objetivo.]
+
+---
+class: inverse, center, middle
+
+# 6) Cierre
+
+---
+
+## Ideas clave para llevar
+
+- **Conservación** + **reglas de transporte** = lenguaje común del paisaje.  
+- La **morfología global** surge de **rotación, densidades e isostasia**.  
+- La **topografía a gran escala** refleja **tectónica**, **enfriamiento litosférico** y **flujos del manto**.  
+- La **deformación activa** se lee en **marcadores** y **perfiles**.  
+- Los **métodos de datación** anclan las **tasas** y **tiempos**.
+
+.box[
+**Para la próxima**: profundizar en colinas, ríos y transporte de sedimentos (capítulos 10–14, 16–18, según programa).
+]
+
+---
+
+## Actividades sugeridas (en clase o tarea)
+
+1. **Mapa conceptual** de continuidad: define **S, P, L, q** para: colina, río, glaciar.  
+2. **Ejercicio de isostasia**: estima rebote por 1 km de erosión (sup. densidades).  
+3. **Perfiles de río**: identifica knickpoints y posibles forzantes.  
+4. **Ficha de método**: selecciona una técnica de cap. 6 y justifica su uso en un caso local.
+
+---
+
+## Referencia principal
+
+.small[Anderson, R. S., & Anderson, S. P. (2010). *Geomorphology: The Mechanics and Chemistry of Landscapes*. Cambridge University Press.]
