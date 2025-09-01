@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
   fig.height = 8, 
   fig.retina = 3,
   out.width = "100%",
-  cache = TRUE,
+  cache = FALSE,
   echo = FALSE,
   message = FALSE, 
   warning = FALSE,
@@ -38,7 +38,7 @@ library(knitr)
 library(ggrepel)
 ```
 
-```{css, echo=FALSE, eval=F}
+```{css, echo=FALSE, eval=T}
 .title-slide {
   background-image: url('fondo.jpg');
   background-size: cover;
@@ -309,13 +309,11 @@ class: inverse, center, middle
 - La **deformación activa** se lee en **marcadores** y **perfiles**.  
 - Los **métodos de datación** anclan las **tasas** y **tiempos**.
 
-.box[
-**Para la próxima**: profundizar en colinas, ríos y transporte de sedimentos (capítulos 10–14, 16–18, según programa).
-]
-
 ---
 
 ## Actividades sugeridas (en clase o tarea)
+
+> Nota del tali: las haremos en práctica
 
 1. **Mapa conceptual** de continuidad: define **S, P, L, q** para: colina, río, glaciar.  
 2. **Ejercicio de isostasia**: estima rebote por 1 km de erosión (sup. densidades).  
